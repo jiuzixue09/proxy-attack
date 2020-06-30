@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="boarderPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bigbigwork.controllers.MainController">
+    <top>
+        <VBox prefHeight="100.0">
+            <Pane prefHeight="50.0">
+                <MenuBar fx:id="topPane">
+                    <Menu mnemonicParsing="false" text="文件">
+                        <MenuItem mnemonicParsing="false" onAction="#showProxyIp" text="显示真实IP" />
+                        <MenuItem mnemonicParsing="false" onAction="#showAppProxyIp" text="显示代理IP" />
+                        <MenuItem mnemonicParsing="false" text="清除日志" />
+                        <MenuItem mnemonicParsing="false" text="退出" />
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="编辑">
+                        <MenuItem mnemonicParsing="false" onAction="#period" text="频率配置" />
+                        <MenuItem mnemonicParsing="false" onAction="#scheculer" text="重启计划" />
+                        <MenuItem mnemonicParsing="false" onAction="#config" text="脚本配置" />
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="脚本">
+                        <MenuItem mnemonicParsing="false" onAction="#restartApp" text="重启大师助手" />
+                        <MenuItem mnemonicParsing="false" onAction="#stopApp" text="关闭大师助手" />
+                        <MenuItem mnemonicParsing="false" onAction="#startApp" text="启动大师助手" />
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="命令">
+                        <Menu mnemonicParsing="false" onAction="#startRecord" text="教学">
+                            <MenuItem mnemonicParsing="false" text="录屏教学"/>
+                            <MenuItem mnemonicParsing="false" text="编辑使命"/>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="命令集">
+                            <MenuItem mnemonicParsing="false" onAction="#login" text="用户登录" />
+                            <MenuItem mnemonicParsing="false" onAction="#stopApp" text="退出登录" />
+                        </Menu>
+
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="帮助">
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </Menu>
+                </MenuBar>
+            </Pane>
+         <Pane prefHeight="50.0">
+             <ToolBar fx:id="toolBar" styleClass="toolbar">
+                 <Button onAction="#startService" text="用户登录">
+                     <graphic>
+                         <ImageView fitHeight="20.0" fitWidth="17.0" layoutX="13.0" pickOnBounds="true" preserveRatio="true">
+                             <cursor>
+                                 <Cursor fx:constant="HAND" />
+                             </cursor>
+                             <Image url="@imgs/login.png" />
+                         </ImageView>
+                     </graphic>
+                 </Button>
+                 <Separator />
+                 <Button onAction="#startService" text="退出登录">
+                     <graphic>
+                         <ImageView fitHeight="20.0" fitWidth="17.0" layoutX="13.0" pickOnBounds="true" preserveRatio="true">
+                             <cursor>
+                                 <Cursor fx:constant="HAND" />
+                             </cursor>
+                             <Image url="@imgs/logout.png" />
+                         </ImageView>
+                     </graphic>
+                 </Button>
+                 <Separator />
+
+                 <Button onAction="#startService" text="启动服务">
+                  <graphic>
+                      <ImageView fitHeight="20.0" fitWidth="17.0" layoutX="13.0" pickOnBounds="true" preserveRatio="true">
+                          <cursor>
+                              <Cursor fx:constant="HAND" />
+                          </cursor>
+                          <Image url="@imgs/go.png" />
+                      </ImageView>
+                  </graphic>
+                 </Button>
+                 <Separator />
+                 <Button onAction="#stopService" text="暂停服务">
+                     <graphic>
+                         <ImageView fitHeight="20.0" fitWidth="17.0" layoutX="13.0" pickOnBounds="true" preserveRatio="true">
+                             <cursor>
+                                 <Cursor fx:constant="HAND" />
+                             </cursor>
+                             <Image url="@imgs/pause.png" />
+                         </ImageView>
+                     </graphic>
+                 </Button>
+                 <Separator />
+                 <Pane HBox.hgrow="ALWAYS" />
+                 <Separator />
+                 <Button onAction="#clear" text="清除日志" />
+
+             </ToolBar>
+         </Pane>
+        </VBox>
+
+
+    </top>
+    <center>
+        <VBox styleClass="content">
+            <Label styleClass="heading" text="日志信息" />
+
+            <TextArea fx:id="logContent" editable="false" prefHeight="300" prefRowCount="20">
+            </TextArea>
+
+        </VBox>
+    </center>
+    <bottom>
+        <HBox styleClass="footer">
+            <Label text="Copyright 2020 Bigbigwork" />
+        </HBox>
+    </bottom>
+
+    <stylesheets>
+        <URL value="@toolbar.css" />
+        <URL value="@main.css" />
+    </stylesheets>
+   <left>
+       <ListView fx:id="dataType" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Pinterest 登录" />
+                <String fx:value="Pinterest 注册" />
+                <String fx:value="Pinterest 搜索" />
+                <String fx:value="Behance 搜索" />
+                </FXCollections>
+            </items>
+         <BorderPane.margin>
+            <Insets top="10.0" />
+         </BorderPane.margin>
+       </ListView>
+
+   </left>
+</BorderPane>

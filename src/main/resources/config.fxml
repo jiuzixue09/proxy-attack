@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane fx:id="gridPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bigbigwork.controllers.ConfigController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="320.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="20.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="20.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="20.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="20.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="20.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="20.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+
+    <stylesheets>
+        <URL value="@main.css"/>
+    </stylesheets>
+    <Label fx:id="lblTitle" text="脚本配置" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+           GridPane.valignment="CENTER"/>
+    <Label text="APP 关闭命令：" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
+    <TextArea fx:id="stopAppScript" prefHeight="50" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <GridPane.margin>
+            <Insets bottom="10.0" left="20.0" top="10.0"/>
+        </GridPane.margin>
+    </TextArea>
+
+    <Label text="APP 运行命令：" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER"/>
+    <TextArea fx:id="startAppScript" prefHeight="50" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <GridPane.margin>
+            <Insets bottom="10.0" left="20.0" top="10.0"/>
+        </GridPane.margin>
+    </TextArea>
+
+    <Label text="VPN进程查询命令：" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER"/>
+    <TextArea fx:id="findAppScript" prefHeight="50" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <GridPane.margin>
+            <Insets bottom="10.0" left="20.0" top="10.0"/>
+        </GridPane.margin>
+    </TextArea>
+
+    <Label text="代理IP查询命令：" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER"/>
+    <TextArea fx:id="findProxyScript" prefHeight="50" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <GridPane.margin>
+            <Insets bottom="10.0" left="20.0" top="10.0"/>
+        </GridPane.margin>
+    </TextArea>
+
+    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                GridPane.rowIndex="5">
+        <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel" text="取消"
+                AnchorPane.leftAnchor="20.0"/>
+        <Button layoutX="197.0" layoutY="17.0" mnemonicParsing="false" onAction="#save" text="保存"/>
+    </AnchorPane>
+
+    <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+        <GridPane.margin>
+            <Insets left="20.0"/>
+        </GridPane.margin>
+        <Image url="@imgs/setting.png"/>
+    </ImageView>
+</GridPane>

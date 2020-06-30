@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<GridPane fx:id="gridPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bigbigwork.controllers.PeriodController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="80.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+
+    <stylesheets>
+        <URL value="@main.css"/>
+    </stylesheets>
+    <Label fx:id="lblTitle" text="频率配置" GridPane.columnIndex="2" GridPane.halignment="CENTER"
+           GridPane.valignment="CENTER"/>
+
+    <Label text="周期请求数：" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
+    <ComboBox fx:id="requestsComboBox" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <GridPane.margin>
+            <Insets left="20.0"/>
+        </GridPane.margin>
+
+    </ComboBox>
+
+
+    <Label text="周期休眠(分钟)：" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.columnIndex="2"
+           GridPane.valignment="CENTER"/>
+    <ComboBox fx:id="sleepTimeComboBox" prefWidth="80.0" promptText="分钟" GridPane.columnIndex="3" GridPane.rowIndex="1">
+        <GridPane.margin>
+            <Insets left="20.0"/>
+        </GridPane.margin>
+
+    </ComboBox>
+    <Label text="请求间隔(秒)：" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER"/>
+    <ComboBox fx:id="periodComboBox" prefWidth="80.0" promptText="秒" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <GridPane.margin>
+            <Insets left="20.0"/>
+        </GridPane.margin>
+
+    </ComboBox>
+
+    <Label text="请求异常间隔(秒)：" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="2"
+           GridPane.valignment="CENTER"/>
+    <ComboBox fx:id="errorPeriodComboBox" prefWidth="80.0" promptText="秒" GridPane.columnIndex="3" GridPane.rowIndex="2">
+        <GridPane.margin>
+            <Insets left="20.0"/>
+        </GridPane.margin>
+
+    </ComboBox>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3"
+                GridPane.rowIndex="3">
+        <Button onAction="#cancel" layoutX="14.0" layoutY="17.0" mnemonicParsing="false" text="取消"
+                AnchorPane.leftAnchor="20.0"/>
+        <Button onAction="#save" layoutX="197.0" layoutY="17.0" mnemonicParsing="false" text="保存"
+                AnchorPane.rightAnchor="50.0"/>
+    </AnchorPane>
+    <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+        <GridPane.margin>
+            <Insets left="20.0"/>
+        </GridPane.margin>
+        <Image url="@imgs/setting.png"/>
+    </ImageView>
+</GridPane>
