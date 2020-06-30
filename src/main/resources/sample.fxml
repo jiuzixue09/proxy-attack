@@ -48,7 +48,7 @@
             </Pane>
          <Pane prefHeight="50.0">
              <ToolBar fx:id="toolBar" styleClass="toolbar">
-                 <Button onAction="#startService" text="用户登录">
+                 <Button onAction="#login" text="用户登录">
                      <graphic>
                          <ImageView fitHeight="20.0" fitWidth="17.0" layoutX="13.0" pickOnBounds="true" preserveRatio="true">
                              <cursor>

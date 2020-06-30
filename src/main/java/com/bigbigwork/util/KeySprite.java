@@ -36,6 +36,31 @@ public class KeySprite {
         robot.keyPress(KeyEvent.VK_ENTER);
     }
 
+    public static void input(int keyCode) throws AWTException {
+        Robot robot = new Robot();
+        robot.keyPress(keyCode);
+    }
+
+    public static boolean getCapsStatus(){
+        return Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
+    }
+
+    public static void capsOn(){
+        if(!getCapsStatus()){
+            Toolkit.getDefaultToolkit().setLockingKeyState(KeyEvent.VK_CAPS_LOCK, Boolean.TRUE);
+        }
+    }
+
+    public static void capsOff(){
+        if(getCapsStatus()){
+            Toolkit.getDefaultToolkit().setLockingKeyState(KeyEvent.VK_CAPS_LOCK, Boolean.FALSE);
+        }
+    }
+
+    public static void capsSwitch(){
+        Toolkit.getDefaultToolkit().setLockingKeyState(KeyEvent.VK_CAPS_LOCK, !getCapsStatus());
+    }
+
     public static void setSystemClipboard(String content){
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection selection = new StringSelection(content);

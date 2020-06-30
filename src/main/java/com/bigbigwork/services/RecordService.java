@@ -1,6 +1,5 @@
 package com.bigbigwork.services;
 
-import com.bigbigwork.util.KeyCodes;
 import com.bigbigwork.vo.Command;
 import javafx.scene.control.TableView;
 import lc.kra.system.keyboard.GlobalKeyboardHook;
@@ -12,6 +11,7 @@ import lc.kra.system.mouse.event.GlobalMouseEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +64,7 @@ public class RecordService implements Runnable {
     }
     
     public String keyString(GlobalKeyEvent event){
-        String keyText = KeyCodes.getKeyText(event.getVirtualKeyCode());
+        String keyText = KeyEvent.getKeyText(event.getVirtualKeyCode());
         LOG.info("code:{}, text:{}", event.getVirtualKeyCode(), keyText);
         return keyText;
     }
