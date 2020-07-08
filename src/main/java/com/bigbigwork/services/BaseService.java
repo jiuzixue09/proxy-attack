@@ -1,11 +1,15 @@
 package com.bigbigwork.services;
 
 import com.bigbigwork.util.ConfigUtil;
+import com.bigbigwork.util.DBUtil;
 import com.bigbigwork.vo.Configure;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -86,6 +90,22 @@ public abstract class BaseService implements AppService {
                 print.accept(serviceName + "休息" + timeout + "分钟");
                 try {TimeUnit.MINUTES.sleep(timeout);}catch (Exception ignored){}
             }
+        }
+
+    }
+
+    ComboPooledDataSource dataSource = DBUtil.getDataSource();
+    private static final String sql = "insert into `pinterest-test`.account_cookie(user_name,user_password) values(?,?)";
+
+    public void login(String userName, String password){
+
+        try (Connection connection = dataSource.getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,userName);
+            preparedStatement.setString(2,password);
+            preparedStatement.executeUpdate();
+        }catch (Exception e){
+            print.accept("sql error:" + e);
         }
 
     }

@@ -25,10 +25,11 @@ dependencies {
     // https://mvnrepository.com/artifact/redis.clients/jedis
     implementation 'redis.clients:jedis:3.3.0'
     implementation 'lc.kra.system:system-hook:3.7'
+    implementation 'com.mchange:c3p0:0.9.5.5'
+    implementation 'mysql:mysql-connector-java:8.0.20'
     testImplementation 'com.1stleg:jnativehook:2.1.0'
 
-
-    testImplementation  'junit:junit:4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
 }
 
 sourceSets { main { resources { exclude '**/*.txt' } } }

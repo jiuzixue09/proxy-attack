@@ -54,6 +54,7 @@ public class PinterestRegisterService extends BaseService {
                                 if(++times >= 5) break;
                             }else{
                                 if(status.equals("200"))
+                                    login(userName,password);
                                     ACCOUNT_LOG.info("username={},password={}", userName, password);
                                 times = 0;
                             }
