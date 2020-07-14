@@ -138,7 +138,7 @@ public class MainController extends BaseController {
         new Thread(() ->{
             while (running){
                 try {
-                    if (!proxyHandle()) running = false;
+                    if (!proxyHandle()) stop();
                     TimeUnit.MINUTES.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
