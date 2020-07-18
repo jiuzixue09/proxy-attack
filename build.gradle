@@ -17,6 +17,8 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/com.rabbitmq/amqp-client
+    implementation 'com.rabbitmq:amqp-client:5.9.0'
     implementation 'org.apache.httpcomponents:httpclient:4.5.3'
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     implementation 'org.slf4j:slf4j-api:1.7.30'
