@@ -1,15 +1,17 @@
 package com.bigbigwork.services;
 
 import com.bigbigwork.util.ConfigUtil;
-import com.bigbigwork.util.DBUtil;
+import com.bigbigwork.util.HttpClientTools;
 import com.bigbigwork.vo.Configure;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -94,19 +96,14 @@ public abstract class BaseService implements AppService {
 
     }
 
-    ComboPooledDataSource dataSource = DBUtil.getDataSource();
-    private static final String sql = "insert into `pinterest-test`.account_cookie(user_name,user_password) values(?,?)";
+    private static final String PRE_URL = "http://47.111.118.163:8080/account?name=%s&password=%s";
+    public void login(String userName, String password) throws IOException {
+        String url = String.format(PRE_URL, userName, password);
 
-    public void login(String userName, String password){
-
-        try (Connection connection = dataSource.getConnection()){
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1,userName);
-            preparedStatement.setString(2,password);
-            preparedStatement.executeUpdate();
-        }catch (Exception e){
-            print.accept("sql error:" + e);
-        }
+        URL u = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) u.openConnection();
+        con.setRequestMethod("GET");
+        System.out.println(con.getResponseCode());
 
     }
 }

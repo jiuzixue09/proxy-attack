@@ -5,6 +5,7 @@ import com.bigbigwork.util.HttpClientTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -53,9 +54,15 @@ public class PinterestRegisterService extends BaseService {
                             if(status.equals("429")){
                                 if(++times >= 5) break;
                             }else{
-                                if(status.equals("200"))
-                                    login(userName,password);
+                                if(status.equals("200")){
+                                    String pwd = URLEncoder.encode(password,"utf-8");
+                                    try{
+                                        login(userName,pwd);
+                                    }catch (Exception e){
+                                        message("访问数据库失败！！！");
+                                    }
                                     ACCOUNT_LOG.info("username={},password={}", userName, password);
+                                }
                                 times = 0;
                             }
                         }else{
