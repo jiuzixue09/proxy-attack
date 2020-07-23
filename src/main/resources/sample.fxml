@@ -32,8 +32,8 @@
                     </Menu>
                     <Menu mnemonicParsing="false" text="命令">
                         <Menu mnemonicParsing="false" onAction="#startRecord" text="教学">
-                            <MenuItem mnemonicParsing="false" text="录屏教学"/>
-                            <MenuItem mnemonicParsing="false" text="编辑使命"/>
+                            <MenuItem mnemonicParsing="false" text="录屏教学" />
+                            <MenuItem mnemonicParsing="false" text="编辑命令" />
                         </Menu>
                         <Menu mnemonicParsing="false" text="命令集">
                             <MenuItem mnemonicParsing="false" onAction="#login" text="用户登录" />

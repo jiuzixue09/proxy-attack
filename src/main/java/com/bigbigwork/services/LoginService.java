@@ -7,8 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class LoginService {
@@ -20,7 +24,7 @@ public class LoginService {
         this.file = file;
     }
 
-    public void login(){
+    public void login(BlockingQueue<String> queue){
         try {
             List<Command> list = (List<Command>) ObjectFileUtil.read(file);
             LOG.info(list.toString());
@@ -38,14 +42,18 @@ public class LoginService {
                     }
                 }else{
                     try {
-                        if (operation.equals("17,86")) {
-                            KeySprite.paste("123456");
-                        } else if(operation.equals("20")) {
+                        if (operation.equals("Ctrl,V")) {
+                            if(Objects.nonNull(queue) && queue.size() > 0){
+                                KeySprite.paste(queue.poll());
+                            }else{
+                                KeySprite.paste(KeySprite.getSystemClipboard());
+                            }
+                        } else if(command.getKeyCode().equals("20")) {
                             KeySprite.capsSwitch();
                         }else{
                             KeySprite.input(Integer.parseInt(command.getKeyCode().split(",")[0]));
                         }
-                    } catch (AWTException e) {
+                    } catch (Exception e) {
                         LOG.error("input error", e);
                     }
                 }

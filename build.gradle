@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.bigbigwork'
-version '1.1.1'
+version '1.1.2'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -17,6 +17,7 @@ repositories {
 }
 
 dependencies {
+//    implementation 'com.alibaba:fastjson:1.2.62'
     // https://mvnrepository.com/artifact/com.rabbitmq/amqp-client
     implementation 'com.rabbitmq:amqp-client:5.9.0'
     implementation 'org.apache.httpcomponents:httpclient:4.5.3'

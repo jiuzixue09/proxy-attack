@@ -101,9 +101,11 @@ public abstract class BaseService implements AppService {
         String url = String.format(PRE_URL, userName, password);
 
         URL u = new URL(url);
+
         HttpURLConnection con = (HttpURLConnection) u.openConnection();
         con.setRequestMethod("GET");
         System.out.println(con.getResponseCode());
+        con.disconnect();
 
     }
 }

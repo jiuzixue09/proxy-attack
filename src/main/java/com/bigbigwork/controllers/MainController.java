@@ -21,8 +21,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainController extends BaseController {
     @FXML
@@ -216,7 +221,25 @@ public class MainController extends BaseController {
         appProxyIdService.run();
     }
 
+    Pattern pat = Pattern.compile("name\":[\"]?([^\",]+).*password\":\"([^\"}]+)");
     public void login() {
-        new LoginService(new File("record.bin")).login();
+
+        try {
+            String account = BMasterAccountService.getAccount();
+            if(Objects.nonNull(account) && account.length() > 0){
+                BlockingQueue<String> queue = new ArrayBlockingQueue<>(2);
+                Matcher matcher = pat.matcher(account);
+                if(matcher.find()){
+                    queue.add(matcher.group(1));
+                    queue.add(matcher.group(2));
+                    new LoginService(new File("record.bin")).login(queue);
+                }else{
+                    print("账号解析出错：" + account);
+                }
+            }
+        } catch (InterruptedException e) {
+            print("APP账号获取失败：" + e.toString());
+            e.printStackTrace();
+        }
     }
 }

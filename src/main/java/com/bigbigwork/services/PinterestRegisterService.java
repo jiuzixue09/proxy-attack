@@ -56,11 +56,14 @@ public class PinterestRegisterService extends BaseService {
                             }else{
                                 if(status.equals("200")){
                                     String pwd = URLEncoder.encode(password,"utf-8");
-                                    try{
-                                        login(userName,pwd);
-                                    }catch (Exception e){
-                                        message("访问数据库失败！！！");
-                                    }
+                                    new Thread(() ->{
+                                        try{
+                                            login(userName,pwd);
+                                        }catch (Exception e){
+                                            message("访问数据库失败！！！");
+                                        }
+                                    }).start();
+
                                     ACCOUNT_LOG.info("username={},password={}", userName, password);
                                 }
                                 times = 0;
