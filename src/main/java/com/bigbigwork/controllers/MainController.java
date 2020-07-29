@@ -9,14 +9,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class MainController extends BaseController {
     @FXML
@@ -28,6 +34,8 @@ public class MainController extends BaseController {
     public MenuBar topPane;
     @FXML
     public ToolBar toolBar;
+    //流量控制
+    private static final int MAX_SIZE = (int)(1000000000 * 0.9);
 
     private final List<AppService> tasks = new ArrayList<>();
     private final List<String> names = new ArrayList<>();
@@ -52,10 +60,33 @@ public class MainController extends BaseController {
                 (autot_raffic_attack.equalsIgnoreCase("yes") ||
                         autot_raffic_attack.equalsIgnoreCase("true"))){
             try {
-                TimeUnit.SECONDS.sleep(5);
                 login();
-                TimeUnit.SECONDS.sleep(5);
-                trafficAttack();
+                AtomicLong totalSize = new AtomicLong(0);
+                Path path = Paths.get("behance_url.txt");
+                List<String> lines = Files.readAllLines(path);
+                Random random = new Random();
+
+                for (int i = 0; i < 10; i++) {
+                    new Thread(() -> {
+                        for (int j = 0; j < 100; j++) {
+                            String url = lines.get(random.nextInt(lines.size()));
+                            try {
+                                long size = HttpClientTools.download(url, null);
+                                if(totalSize.addAndGet(size) > MAX_SIZE){
+                                    print("流量使用完毕！！！");
+                                    break;
+                                }
+                                if(size > 0){
+                                    print("已用流量：" + (totalSize.get() / 1000000.0) + "M");
+                                }
+                            }catch (Exception e){
+                                print("文件下载失败！！！");
+                                LOG.error("文件下载失败 : url={}", url ,e);
+                            }
+                        }
+                    }).start();
+                }
+
             }catch (Exception e){
                 print("自动化流量攻击异常: " + e.getMessage());
                 LOG.error("自动化流量攻击异常", e);
