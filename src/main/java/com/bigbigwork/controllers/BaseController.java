@@ -2,9 +2,11 @@ package com.bigbigwork.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +60,7 @@ public class BaseController {
             fxmlLoader.setLocation(getClass().getResource("/record.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
             Stage stage = new Stage();
+            rightCornerStage(stage,600,400);
 //            stage.initStyle(StageStyle.TRANSPARENT);
 //            scene.setFill(null);
             stage.toBack();
@@ -86,4 +89,13 @@ public class BaseController {
             LOG.error("scheduler error:", e);
         }
     }
+
+    private void rightCornerStage(Stage stage, double width, double height) {
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+        //set Stage boundaries to the lower right corner of the visible bounds of the main screen
+        stage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - width);
+        stage.setY(primaryScreenBounds.getMinY() + primaryScreenBounds.getHeight() - height);
+    }
+
 }

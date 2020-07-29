@@ -27,6 +27,8 @@ public class ConfigController implements Initializable {
     public TextArea findAppScript;
     @FXML
     public TextArea findProxyScript;
+    @FXML
+    public TextArea startPython;
 
     public void cancel(ActionEvent actionEvent) {
         Stage stage = (Stage) gridPane.getScene().getWindow();
@@ -40,6 +42,8 @@ public class ConfigController implements Initializable {
             configure.setStartAPPScript(startAppScript.getText());
             configure.setFindAPPScript(findAppScript.getText());
             configure.setFindProxyScript(findProxyScript.getText());
+            configure.setStartPython(startPython.getText());
+
             ConfigUtil.updateConfigure(configure);
             LOG.info("update configure:{}",configure);
             Stage stage = (Stage) gridPane.getScene().getWindow();
@@ -57,6 +61,7 @@ public class ConfigController implements Initializable {
             startAppScript.setText(configure.getStartAPPScript());
             findAppScript.setText(configure.getFindAPPScript());
             findProxyScript.setText(configure.getFindProxyScript());
+            startPython.setText(configure.getStartPython());
         } catch (Exception e) {
             LOG.error("read configure error:",e);
             e.printStackTrace();

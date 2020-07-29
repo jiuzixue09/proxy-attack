@@ -41,22 +41,29 @@
         </GridPane.margin>
     </TextArea>
 
-    <Label text="VPN进程查询命令：" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER"/>
-    <TextArea fx:id="findAppScript" prefHeight="50" GridPane.columnIndex="1" GridPane.rowIndex="3">
+    <Label text="PYTHON 服务命令：" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER"/>
+    <TextArea fx:id="startPython" prefHeight="50" GridPane.columnIndex="1" GridPane.rowIndex="3">
         <GridPane.margin>
             <Insets bottom="10.0" left="20.0" top="10.0"/>
         </GridPane.margin>
     </TextArea>
 
-    <Label text="代理IP查询命令：" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER"/>
-    <TextArea fx:id="findProxyScript" prefHeight="50" GridPane.columnIndex="1" GridPane.rowIndex="4">
+    <Label text="VPN进程查询命令：" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER"/>
+    <TextArea fx:id="findAppScript" prefHeight="50" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <GridPane.margin>
+            <Insets bottom="10.0" left="20.0" top="10.0"/>
+        </GridPane.margin>
+    </TextArea>
+
+    <Label text="代理IP查询命令：" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER"/>
+    <TextArea fx:id="findProxyScript" prefHeight="50" GridPane.columnIndex="1" GridPane.rowIndex="5">
         <GridPane.margin>
             <Insets bottom="10.0" left="20.0" top="10.0"/>
         </GridPane.margin>
     </TextArea>
 
     <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                GridPane.rowIndex="5">
+                GridPane.rowIndex="6">
         <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel" text="取消"
                 AnchorPane.leftAnchor="20.0"/>
         <Button layoutX="197.0" layoutY="17.0" mnemonicParsing="false" onAction="#save" text="保存"/>

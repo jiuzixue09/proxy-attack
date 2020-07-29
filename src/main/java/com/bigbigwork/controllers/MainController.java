@@ -2,30 +2,19 @@ package com.bigbigwork.controllers;
 
 import com.bigbigwork.services.*;
 import com.bigbigwork.timer.Timer;
+import com.bigbigwork.util.HttpClientTools;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,6 +40,28 @@ public class MainController extends BaseController {
     public MainController() {
         Timer timer = new Timer(this);
         new Thread(timer).start();
+        autoRun();
+    }
+
+    /**
+     * 自动化脚本流量攻击
+     */
+    public void autoRun(){
+        String autot_raffic_attack = System.getProperty("AUTOT_RAFFIC_ATTACK");
+        if(Objects.nonNull(autot_raffic_attack) &&
+                (autot_raffic_attack.equalsIgnoreCase("yes") ||
+                        autot_raffic_attack.equalsIgnoreCase("true"))){
+            try {
+                TimeUnit.SECONDS.sleep(5);
+                login();
+                TimeUnit.SECONDS.sleep(5);
+                trafficAttack();
+            }catch (Exception e){
+                print("自动化流量攻击异常: " + e.getMessage());
+                LOG.error("自动化流量攻击异常", e);
+            }
+
+        }
     }
 
     @FXML
@@ -240,6 +251,16 @@ public class MainController extends BaseController {
         } catch (InterruptedException e) {
             print("APP账号获取失败：" + e.toString());
             e.printStackTrace();
+        }
+    }
+
+    public void trafficAttack() {
+        try{
+            appRestartService.startPython();
+            HttpClientTools.doGet("http://localhost:5000/pinterest/scroll");
+        }catch (Exception e){
+            print("流量攻击异常:" + e.toString());
+            LOG.error("traffic attack error", e);
         }
     }
 }

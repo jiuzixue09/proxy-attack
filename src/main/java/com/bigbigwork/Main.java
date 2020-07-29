@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class Main extends Application {
 
     @Override
@@ -23,6 +25,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(event -> {
             System.exit(0);
         });
+
     }
 
     private void rightCornerStage(Stage stage, double width, double height) {
@@ -35,6 +38,9 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        if(Objects.nonNull(args) && args.length > 0){
+            System.setProperty("AUTOT_RAFFIC_ATTACK", args[0]);
+        }
         launch(args);
     }
 }

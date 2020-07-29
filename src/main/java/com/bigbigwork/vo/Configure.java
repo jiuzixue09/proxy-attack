@@ -15,6 +15,7 @@ public class Configure implements Serializable {
     private String stopAPPScript;
     private String findAPPScript;
     private String findProxyScript;
+    private String startPython;
 
     public Integer getErrorPeriod() {
         return errorPeriod;
@@ -111,6 +112,14 @@ public class Configure implements Serializable {
         this.findProxyScript = findProxyScript;
     }
 
+    public String getStartPython() {
+        return startPython;
+    }
+
+    public void setStartPython(String startPython) {
+        this.startPython = startPython;
+    }
+
     @Override
     public String toString() {
         return "Configure{" +
@@ -124,6 +133,7 @@ public class Configure implements Serializable {
                 ", stopAPPScript='" + stopAPPScript + '\'' +
                 ", findAPPScript='" + findAPPScript + '\'' +
                 ", findProxyScript='" + findProxyScript + '\'' +
+                ", startPython='" + startPython + '\'' +
                 '}';
     }
 }

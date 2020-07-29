@@ -45,6 +45,15 @@ public class AppRestartService {
         }
     }
 
+    public void startPython(){
+        runBat(configure.getStartPython(), false);
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException ignored) {
+
+        }
+    }
+
     public void stopFirefox(){
         try {
             runBat("taskkill /im firefox.exe",true);

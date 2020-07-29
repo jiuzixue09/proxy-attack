@@ -52,6 +52,7 @@ public class ConfigUtil {
         configure.setErrorPeriod(10);
         configure.setRequests(30);
         configure.setSleepTime(5);
+        configure.setStartPython("cd  C:\\Users\\Administrator\\Desktop\\selenium & python Main.py");
         configure.setFindAPPScript("tasklist |findstr \"vrr\"");
         configure.setFindProxyScript("netstat -nao |findstr ");
         configure.setStartAPPScript("\"C:\\Program Files (x86)\\BMaster\\BMaster.exe\"");
