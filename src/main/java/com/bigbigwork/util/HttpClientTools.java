@@ -25,6 +25,7 @@ import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -204,7 +205,9 @@ public class HttpClientTools {
 		try {
 			CloseableHttpResponse response = httpclient.execute(httpGet);
 			return response.getEntity().getContentLength();
-		} catch (Exception e) {
+		} catch (SSLHandshakeException e){
+			return -1;
+		}catch (Exception e) {
 			System.err.println("url=" + url + "\n" + e);
 		} finally {
 			try {

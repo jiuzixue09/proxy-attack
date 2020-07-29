@@ -68,10 +68,20 @@ public class MainController extends BaseController {
 
                 for (int i = 0; i < 10; i++) {
                     new Thread(() -> {
+                        int SSLHandshakeExceptionTimes = 0;
                         for (int j = 0; j < 100; j++) {
                             String url = lines.get(random.nextInt(lines.size()));
                             try {
                                 long size = HttpClientTools.download(url, null);
+                                if(size == -1){
+                                    SSLHandshakeExceptionTimes += 1;
+                                    if(SSLHandshakeExceptionTimes > 2){
+                                        print("代理异常， 程序停止！！！" );
+                                        break;
+                                    }
+                                }else{
+                                    SSLHandshakeExceptionTimes = 0;
+                                }
                                 if(totalSize.addAndGet(size) > MAX_SIZE){
                                     print("流量使用完毕！！！");
                                     break;
