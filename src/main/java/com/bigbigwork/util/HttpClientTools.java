@@ -24,16 +24,15 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 
+import javax.imageio.ImageIO;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLHandshakeException;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -184,9 +183,10 @@ public class HttpClientTools {
 	 * download file
 	 * @param url image url
 	 * @param headers headers
+	 * @param f
 	 * @return file content length
 	 */
-	public static long download(String url, Map<String, String> headers){
+	public static long download(String url, Map<String, String> headers, File f){
 		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
 		CloseableHttpClient httpclient = HttpClients.custom()
 				.setConnectionManager(cm)
@@ -204,7 +204,12 @@ public class HttpClientTools {
 		httpGet.setConfig(requestConfig);
 		try {
 			CloseableHttpResponse response = httpclient.execute(httpGet);
-			return response.getEntity().getContentLength();
+
+			HttpEntity entity = response.getEntity();
+			try{
+				ImageIO.write(ImageIO.read(entity.getContent()),"jpg", new File(f.getAbsolutePath(), System.nanoTime() + ".jpg"));
+			}catch (Exception ignored){}
+			return entity.getContentLength();
 		} catch (SSLHandshakeException e){
 			return -1;
 		}catch (Exception e) {

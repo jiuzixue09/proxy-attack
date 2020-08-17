@@ -12,17 +12,13 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class MainController extends BaseController {
     @FXML
@@ -66,6 +62,17 @@ public class MainController extends BaseController {
 
     public void traffic() {
         try {
+            File f = new File("images");
+            if(f.exists()){
+
+                Files.walk(Paths.get(f.getAbsolutePath())).sorted(Comparator.reverseOrder()).map(Path::toFile)
+                        .forEach(File::delete);
+                print("清空文件夹:" + f.getName());
+            }
+
+            boolean mkdirs = f.mkdirs();
+            if(mkdirs) print("创建文件夹：" + f.getName());
+
             AtomicLong totalSize = new AtomicLong(0);
             Path path = Paths.get("behance_url.txt");
             List<String> lines = Files.readAllLines(path);
@@ -77,7 +84,7 @@ public class MainController extends BaseController {
                     for (int j = 0; j < 100; j++) {
                         String url = lines.get(random.nextInt(lines.size()));
                         try {
-                            long size = HttpClientTools.download(url, null);
+                            long size = HttpClientTools.download(url, null, f);
                             if(size == -1){
                                 SSLHandshakeExceptionTimes += 1;
                                 if(SSLHandshakeExceptionTimes > 2){
