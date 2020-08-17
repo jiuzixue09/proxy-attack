@@ -59,49 +59,52 @@ public class MainController extends BaseController {
         if(Objects.nonNull(autot_raffic_attack) &&
                 (autot_raffic_attack.equalsIgnoreCase("yes") ||
                         autot_raffic_attack.equalsIgnoreCase("true"))){
-            try {
-                login();
-                AtomicLong totalSize = new AtomicLong(0);
-                Path path = Paths.get("behance_url.txt");
-                List<String> lines = Files.readAllLines(path);
-                Random random = new Random();
+            login();
+            traffic();
+        }
+    }
 
-                for (int i = 0; i < 10; i++) {
-                    new Thread(() -> {
-                        int SSLHandshakeExceptionTimes = 0;
-                        for (int j = 0; j < 100; j++) {
-                            String url = lines.get(random.nextInt(lines.size()));
-                            try {
-                                long size = HttpClientTools.download(url, null);
-                                if(size == -1){
-                                    SSLHandshakeExceptionTimes += 1;
-                                    if(SSLHandshakeExceptionTimes > 2){
-                                        print("代理异常， 程序停止！！！" );
-                                        break;
-                                    }
-                                }else{
-                                    SSLHandshakeExceptionTimes = 0;
-                                }
-                                if(totalSize.addAndGet(size) > MAX_SIZE){
-                                    print("流量使用完毕！！！");
+    public void traffic() {
+        try {
+            AtomicLong totalSize = new AtomicLong(0);
+            Path path = Paths.get("behance_url.txt");
+            List<String> lines = Files.readAllLines(path);
+            Random random = new Random();
+
+            for (int i = 0; i < 10; i++) {
+                new Thread(() -> {
+                    int SSLHandshakeExceptionTimes = 0;
+                    for (int j = 0; j < 100; j++) {
+                        String url = lines.get(random.nextInt(lines.size()));
+                        try {
+                            long size = HttpClientTools.download(url, null);
+                            if(size == -1){
+                                SSLHandshakeExceptionTimes += 1;
+                                if(SSLHandshakeExceptionTimes > 2){
+                                    print("代理异常， 程序停止！！！" );
                                     break;
                                 }
-                                if(size > 0){
-                                    print("已用流量：" + (totalSize.get() / 1000000.0) + "M");
-                                }
-                            }catch (Exception e){
-                                print("文件下载失败！！！");
-                                LOG.error("文件下载失败 : url={}", url ,e);
+                            }else{
+                                SSLHandshakeExceptionTimes = 0;
                             }
+                            if(totalSize.addAndGet(size) > MAX_SIZE){
+                                print("流量使用完毕！！！");
+                                break;
+                            }
+                            if(size > 0.1){
+                                print(String.format("已用流量：%.2fM", (totalSize.get() / 1000000.0)));
+                            }
+                        }catch (Exception e){
+                            print("文件下载失败！！！");
+                            LOG.error("文件下载失败 : url={}", url ,e);
                         }
-                    }).start();
-                }
-
-            }catch (Exception e){
-                print("自动化流量攻击异常: " + e.getMessage());
-                LOG.error("自动化流量攻击异常", e);
+                    }
+                }).start();
             }
 
+        }catch (Exception e){
+            print("自动化流量攻击异常: " + e.getMessage());
+            LOG.error("自动化流量攻击异常", e);
         }
     }
 

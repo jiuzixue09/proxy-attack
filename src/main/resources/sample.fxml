@@ -38,7 +38,8 @@
                         <Menu mnemonicParsing="false" text="命令集">
                             <MenuItem mnemonicParsing="false" onAction="#login" text="用户登录" />
                             <MenuItem mnemonicParsing="false" onAction="#stopApp" text="退出登录" />
-                            <MenuItem mnemonicParsing="false" onAction="#trafficAttack" text="流量攻击" />
+                            <MenuItem mnemonicParsing="false" onAction="#trafficAttack" text="浏览器流量攻击" />
+                            <MenuItem mnemonicParsing="false" onAction="#traffic" text="后台流量攻击" />
                         </Menu>
 
                     </Menu>
