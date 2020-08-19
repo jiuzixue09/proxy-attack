@@ -53,15 +53,27 @@ public class HttpClientTools {
 
 	}
 
-
 	static Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
 			.register("http", PlainConnectionSocketFactory.INSTANCE)
 			.register("https", new MyConnectionSocketFactory(SSLContexts.createSystemDefault()))
 			.build();
 
+	static PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
+	static RequestConfig requestConfig;
+	static {
+		final int TIME_OUT = 1000 * 60;
+		cm.setMaxTotal(20);//多线程调用注意配置，根据线程数设定
+		cm.setDefaultMaxPerRoute(cm.getMaxTotal());
+
+		requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD)
+				.setSocketTimeout(TIME_OUT).setConnectTimeout(TIME_OUT)
+				.setConnectionRequestTimeout(10000)
+				.build();
+	}
 
 
-	private static final int TIME_OUT = 1000 * 60;
+
+
 
 	/**
 	 * 请求头，默认设置，chrome头
@@ -83,22 +95,16 @@ public class HttpClientTools {
 
 
 	public static String doPostMap(String url, Map<String,String> params,Map<String, String> headers) {
-		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
 		CloseableHttpClient httpclient = HttpClients.custom()
 				.setConnectionManager(cm)
-				.build();
-		RequestConfig requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).setSocketTimeout(TIME_OUT).setConnectTimeout(TIME_OUT)
 				.build();
 
 		try {
 			HttpPost post = new HttpPost(url);
-
-
 			post.setConfig(requestConfig);
 
-			//
 			if(params!=null){
-				List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+				List<NameValuePair> nvps = new ArrayList<>();
 	            for (String name : params.keySet()) {
 	    			nvps.add(new BasicNameValuePair(name, params.get(name)));
 	    		}
@@ -130,13 +136,10 @@ public class HttpClientTools {
 
 	public static String doPostCookie(String url, Map<String,String> params,Map<String, String> headers) {
 		CookieStore cookieStore = new BasicCookieStore();
-		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
 
 		// 创建HttpClient上下文
 		HttpClientContext context = HttpClientContext.create();
 		context.setCookieStore(cookieStore);
-		RequestConfig requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).setSocketTimeout(TIME_OUT).setConnectTimeout(TIME_OUT)
-				.build();
 		CloseableHttpClient httpclient = HttpClients.custom()
 				.setConnectionManager(cm)
 				.setDefaultCookieStore(cookieStore).setDefaultRequestConfig(requestConfig)
@@ -146,9 +149,8 @@ public class HttpClientTools {
 		try {
 			HttpPost post = new HttpPost(url);
 
-			//
 			if(params!=null){
-				List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+				List<NameValuePair> nvps = new ArrayList<>();
 				for (String name : params.keySet()) {
 					nvps.add(new BasicNameValuePair(name, params.get(name)));
 				}
@@ -187,11 +189,8 @@ public class HttpClientTools {
 	 * @return file content length
 	 */
 	public static long download(String url, Map<String, String> headers, File f){
-		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
 		CloseableHttpClient httpclient = HttpClients.custom()
 				.setConnectionManager(cm)
-				.build();
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(TIME_OUT).setConnectTimeout(TIME_OUT)
 				.build();
 		HttpGet httpGet = new HttpGet(url);
 
@@ -225,11 +224,8 @@ public class HttpClientTools {
 	}
 
 	public static int doGetStatus(String url, Map<String, String> headers) {
-		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
 		CloseableHttpClient httpclient = HttpClients.custom()
 				.setConnectionManager(cm)
-				.build();
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(TIME_OUT).setConnectTimeout(TIME_OUT)
 				.build();
 		HttpGet httpGet = new HttpGet(url);
 
@@ -257,11 +253,8 @@ public class HttpClientTools {
 
 
 	public static String doGet(String url, Map<String, String> headers) {
-		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
 		CloseableHttpClient httpclient = HttpClients.custom()
 				.setConnectionManager(cm)
-				.build();
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(TIME_OUT).setConnectTimeout(TIME_OUT)
 				.build();
 		HttpGet httpGet = new HttpGet(url);
 
