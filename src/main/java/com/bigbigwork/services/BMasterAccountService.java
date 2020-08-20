@@ -12,7 +12,7 @@ public class BMasterAccountService {
     private final static String QUEUE_NAME = "direct.bmaster.account.queue";
     private final static String EXCHANGE_NAME = "direct.python.pinterest.account.exchange";
     private final static String VIRTUAL_HOST = "/neptune";
-    private final static String HOST = "127.0.0.1";
+    private final static String HOST = "121.196.209.183";
     private final static int PORT = 5672;
     private final static String USERNAME = "neptune";
     private final static String PASSWORD = "neptune123.jhk";

@@ -34,6 +34,8 @@ import java.net.Proxy;
 import java.net.Socket;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class HttpClientTools {
@@ -58,21 +60,21 @@ public class HttpClientTools {
 			.register("https", new MyConnectionSocketFactory(SSLContexts.createSystemDefault()))
 			.build();
 
+
+	static final int TIME_OUT = 1000 * 60;
+	static Supplier<RequestConfig> requestConfig = () ->  RequestConfig.custom()
+			.setSocketTimeout(TIME_OUT).setConnectTimeout(TIME_OUT)
+			.setConnectionRequestTimeout(10000)
+			.build();
+
+	private static final CloseableHttpClient httpClient;
 	static PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
-	static RequestConfig requestConfig;
 	static {
-		final int TIME_OUT = 1000 * 60;
+
 		cm.setMaxTotal(20);//多线程调用注意配置，根据线程数设定
 		cm.setDefaultMaxPerRoute(cm.getMaxTotal());
-
-		requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD)
-				.setSocketTimeout(TIME_OUT).setConnectTimeout(TIME_OUT)
-				.setConnectionRequestTimeout(10000)
-				.build();
+		httpClient = HttpClients.custom().setConnectionManager(cm).build();
 	}
-
-
-
 
 
 	/**
@@ -95,13 +97,10 @@ public class HttpClientTools {
 
 
 	public static String doPostMap(String url, Map<String,String> params,Map<String, String> headers) {
-		CloseableHttpClient httpclient = HttpClients.custom()
-				.setConnectionManager(cm)
-				.build();
 
 		try {
 			HttpPost post = new HttpPost(url);
-			post.setConfig(requestConfig);
+			post.setConfig(requestConfig.get());
 
 			if(params!=null){
 				List<NameValuePair> nvps = new ArrayList<>();
@@ -111,24 +110,17 @@ public class HttpClientTools {
 	            post.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
 
 			}
-
-            //
 			if (headers != null) {
 				for (String key : headers.keySet()) {
 					post.addHeader(key, headers.get(key));
 				}
 			}
-			CloseableHttpResponse response = httpclient.execute(post);
-			HttpEntity entity = response.getEntity();
-			return EntityUtils.toString(entity, Consts.UTF_8);
+			try(CloseableHttpResponse response = httpClient.execute(post)){
+				HttpEntity entity = response.getEntity();
+				return EntityUtils.toString(entity, Consts.UTF_8);
+			}
 		} catch (Exception e) {
 			System.err.println("url=" + url + " , params=" + params+" , hearders="+headers + "\n" + e);
-		} finally {
-			try {
-				httpclient.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}
@@ -137,11 +129,16 @@ public class HttpClientTools {
 	public static String doPostCookie(String url, Map<String,String> params,Map<String, String> headers) {
 		CookieStore cookieStore = new BasicCookieStore();
 
+		RequestConfig requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD)
+				.setSocketTimeout(TIME_OUT).setConnectTimeout(TIME_OUT)
+				.setConnectionRequestTimeout(10000)
+				.build();
 		// 创建HttpClient上下文
 		HttpClientContext context = HttpClientContext.create();
 		context.setCookieStore(cookieStore);
 		CloseableHttpClient httpclient = HttpClients.custom()
 				.setConnectionManager(cm)
+				.setConnectionManagerShared(true) //设置共享连接池
 				.setDefaultCookieStore(cookieStore).setDefaultRequestConfig(requestConfig)
 				.build();
 
@@ -164,19 +161,14 @@ public class HttpClientTools {
 					post.addHeader(key, headers.get(key));
 				}
 			}
-			CloseableHttpResponse response = httpclient.execute(post);
-			Header[] allHeaders = response.getAllHeaders();
-			List<Cookie> cookies = cookieStore.getCookies();
-			String cookie = cookies.stream().map(it -> it.getName() + "=" + it.getValue()).collect(Collectors.joining(";"));
-			return cookie;
+			try(CloseableHttpResponse response = httpclient.execute(post)){
+				List<Cookie> cookies = cookieStore.getCookies();
+				String cookie = cookies.stream().map(it -> it.getName() + "=" + it.getValue()).collect(Collectors.joining(";"));
+				return cookie;
+			}
+
 		} catch (Exception e) {
 			System.err.println("url=" + url + " , params=" + params+" , hearders="+headers + "\n" + e);
-		} finally {
-			try {
-				httpclient.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}
@@ -189,9 +181,6 @@ public class HttpClientTools {
 	 * @return file content length
 	 */
 	public static long download(String url, Map<String, String> headers, File f){
-		CloseableHttpClient httpclient = HttpClients.custom()
-				.setConnectionManager(cm)
-				.build();
 		HttpGet httpGet = new HttpGet(url);
 
 		if (headers != null) {
@@ -200,10 +189,8 @@ public class HttpClientTools {
 			}
 		}
 
-		httpGet.setConfig(requestConfig);
-		try {
-			CloseableHttpResponse response = httpclient.execute(httpGet);
-
+		httpGet.setConfig(requestConfig.get());
+		try (CloseableHttpResponse response = httpClient.execute(httpGet)){
 			HttpEntity entity = response.getEntity();
 			try{
 				ImageIO.write(ImageIO.read(entity.getContent()),"jpg", new File(f.getAbsolutePath(), System.nanoTime() + ".jpg"));
@@ -213,20 +200,11 @@ public class HttpClientTools {
 			return -1;
 		}catch (Exception e) {
 			System.err.println("url=" + url + "\n" + e);
-		} finally {
-			try {
-				httpclient.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return 0;
 	}
 
 	public static int doGetStatus(String url, Map<String, String> headers) {
-		CloseableHttpClient httpclient = HttpClients.custom()
-				.setConnectionManager(cm)
-				.build();
 		HttpGet httpGet = new HttpGet(url);
 
 		if (headers != null) {
@@ -235,27 +213,17 @@ public class HttpClientTools {
 			}
 		}
 
-		httpGet.setConfig(requestConfig);
-		try {
-			CloseableHttpResponse response = httpclient.execute(httpGet);
+		httpGet.setConfig(requestConfig.get());
+		try (CloseableHttpResponse response = httpClient.execute(httpGet)){
 			return response.getStatusLine().getStatusCode();
 		} catch (Exception e) {
 			System.err.println("url=" + url + "\n" + e);
-		} finally {
-			try {
-				httpclient.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return 500;
 	}
 
 
 	public static String doGet(String url, Map<String, String> headers) {
-		CloseableHttpClient httpclient = HttpClients.custom()
-				.setConnectionManager(cm)
-				.build();
 		HttpGet httpGet = new HttpGet(url);
 
 		if (headers != null) {
@@ -263,20 +231,12 @@ public class HttpClientTools {
 				httpGet.setHeader(header.getKey(), header.getValue());
 			}
 		}
-
-		httpGet.setConfig(requestConfig);
-		try {
-			CloseableHttpResponse response = httpclient.execute(httpGet);
+		httpGet.setConfig(requestConfig.get());
+		try (CloseableHttpResponse response = httpClient.execute(httpGet)){
 			HttpEntity entity = response.getEntity();
 			return EntityUtils.toString(entity, Consts.UTF_8);
 		} catch (Exception e) {
 			System.err.println("url=" + url + "\n" + e);
-		} finally {
-			try {
-				httpclient.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}

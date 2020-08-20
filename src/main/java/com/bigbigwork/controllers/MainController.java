@@ -70,6 +70,7 @@ public class MainController extends BaseController {
                 print("清空文件夹:" + f.getName());
             }
 
+            TimeUnit.SECONDS.sleep(1);
             boolean mkdirs = f.mkdirs();
             if(mkdirs) print("创建文件夹：" + f.getName());
 
@@ -84,7 +85,7 @@ public class MainController extends BaseController {
                     for (int j = 0; j < 100; j++) {
                         String url = lines.get(random.nextInt(lines.size()));
                         try {
-                            long size = HttpClientTools.download(url, null, f);
+                            long size = HttpClientTools.download(url, HttpClientTools.headers(), f);
                             if(size == -1){
                                 SSLHandshakeExceptionTimes += 1;
                                 if(SSLHandshakeExceptionTimes > 2){
